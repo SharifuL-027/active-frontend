@@ -8,7 +8,7 @@ const AdminProtectedRoute = ({ children }) => {
     return <Navigate to="/admin/login" replace />;
   }
 
-  // Token thakle tar vitore thaka page (jemon Dashboard) dekhte dibe
+ 
   return children ? children : <Outlet />;
 };
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, MessageSquare } from 'lucide-react';
+import { Plus, Minus, MessageSquare, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FaqSection = () => {
@@ -34,103 +34,106 @@ const FaqSection = () => {
   };
 
   return (
-    <section className="w-full bg-white py-24 lg:py-32">
-      <div className="max-w-[1700px] mx-auto px-6 lg:px-[5%]">
+    <section className="w-full bg-[#f8fafc] py-20 lg:py-28 relative overflow-hidden">
+      
+      {/* Background Decorative Pattern */}
+      <div className="absolute top-0 left-0 w-full h-1/2 bg-white pointer-events-none rounded-b-[4rem] lg:rounded-b-[8rem] shadow-[0_10px_40px_rgba(0,0,0,0.02)]"></div>
+
+      <div className="max-w-[1000px] mx-auto px-6 lg:px-8 relative z-10">
         
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
-          
-          {/* Left Side: Header & CTA */}
-          <div className="w-full lg:w-5/12 flex flex-col justify-start">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="inter-bold text-[#1e447b] tracking-[0.2em] text-[15px] uppercase mb-4 block">
-                Common Queries
-              </span>
-              <h2 className="inter-bold text-4xl sm:text-5xl lg:text-[4rem] text-slate-900 uppercase tracking-tight leading-[1.1] mb-6">
-                Frequently <br/>
-                <span className="text-[#1e447b]">Asked Questions.</span>
-              </h2>
-              <p className="inter-normal text-slate-600 text-base leading-relaxed mb-10">
-                Find answers to the most common questions about our elevator systems, installation processes, warranties, and maintenance services.
-              </p>
+        {/* --- Center Aligned Header Section --- */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center text-center mb-16"
+        >
+          <span className="inter-bold text-[#eab308] tracking-[0.2em] text-[11px] uppercase mb-4 block">
+            Common Queries
+          </span>
+          <h2 className="inter-black text-4xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-tight mb-6">
+            Frequently <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1e447b] to-blue-700">Asked Questions.</span>
+          </h2>
+          <p className="inter-medium text-slate-600 text-[15px] sm:text-base leading-relaxed max-w-2xl">
+            Find answers to the most common questions about our elevator systems, installation processes, warranties, and maintenance services.
+          </p>
+        </motion.div>
 
-              {/* Support Card */}
-              <div className="bg-white border border-slate-200 p-8 rounded-none shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 flex items-center justify-center mb-6 rounded-none border border-blue-100">
-                  <MessageSquare className="text-[#1e447b]" size={24} />
-                </div>
-                <h3 className="inter-bold text-lg text-slate-900 mb-2 uppercase">Still have questions?</h3>
-                <p className="inter-normal text-slate-500 text-sm mb-6">
-                  Can't find the answer you're looking for? Please chat with our engineering team.
-                </p>
-                <Link to="/contact" className="inline-block bg-[#1e447b] text-white inter-bold text-[10px] uppercase tracking-widest px-6 py-3 hover:bg-[#eab308] hover:text-slate-900 transition-colors duration-300 rounded-none">
-                  Contact Support
-                </Link>
-              </div>
-            </motion.div>
-          </div>
+        {/* --- FAQ Accordion List --- */}
+        <div className="space-y-4 mb-16">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
 
-          {/* Right Side: Accordion */}
-          <div className="w-full lg:w-7/12">
-            <div className="space-y-4">
-              {faqs.map((faq, index) => {
-                const isOpen = openIndex === index;
+            return (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`bg-white transition-all duration-300 rounded-2xl overflow-hidden border ${
+                  isOpen ? 'border-[#1e447b]/30 shadow-[0_10px_30px_rgba(30,68,123,0.08)]' : 'border-slate-100 hover:border-slate-300 shadow-sm'
+                }`}
+              >
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-6 sm:p-8 text-left focus:outline-none group"
+                >
+                  <h3 className={`inter-bold text-[15px] sm:text-lg pr-6 sm:pr-8 transition-colors ${
+                    isOpen ? 'text-[#1e447b]' : 'text-slate-800 group-hover:text-[#1e447b]'
+                  }`}>
+                    {faq.question}
+                  </h3>
+                  <div className={`shrink-0 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${
+                    isOpen ? 'bg-[#1e447b] text-[#eab308]' : 'bg-slate-50 text-slate-400 group-hover:bg-[#1e447b]/10 group-hover:text-[#1e447b]'
+                  }`}>
+                    {isOpen ? <Minus size={18} strokeWidth={2.5} /> : <Plus size={18} strokeWidth={2.5} />}
+                  </div>
+                </button>
 
-                return (
-                  <motion.div 
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className={`bg-white border transition-colors duration-300 rounded-none ${
-                      isOpen ? 'border-[#1e447b] shadow-md' : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <button
-                      onClick={() => toggleFaq(index)}
-                      className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <h3 className={`inter-bold text-base md:text-lg pr-8 transition-colors ${
-                        isOpen ? 'text-[#1e447b]' : 'text-slate-800'
-                      }`}>
-                        {faq.question}
-                      </h3>
-                      <div className={`shrink-0 w-8 h-8 flex items-center justify-center rounded-none border transition-colors ${
-                        isOpen ? 'bg-[#1e447b] border-[#1e447b] text-[#eab308]' : 'bg-slate-50 border-slate-200 text-slate-400'
-                      }`}>
-                        {isOpen ? <Minus size={16} strokeWidth={3} /> : <Plus size={16} strokeWidth={3} />}
+                      <div className="px-6 sm:px-8 pb-6 sm:pb-8">
+                        <div className="w-12 h-1 bg-[#eab308] mb-4 rounded-full"></div>
+                        <p className="inter-medium text-slate-600 leading-relaxed text-sm sm:text-[15px] text-justify">
+                          {faq.answer}
+                        </p>
                       </div>
-                    </button>
-
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="overflow-hidden"
-                        >
-                          <div className="p-6 pt-0 border-t border-slate-100">
-                            <p className="inter-medium text-slate-600 leading-relaxed text-sm md:text-base mt-4">
-                              {faq.answer}
-                            </p>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {/* --- Center Aligned Support CTA --- */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-white border border-slate-100 rounded-3xl p-8 sm:p-10 text-center shadow-[0_8px_30px_rgba(0,0,0,0.03)] flex flex-col items-center max-w-3xl mx-auto"
+        >
+          <div className="w-14 h-14 bg-[#1e447b]/5 flex items-center justify-center mb-6 rounded-full">
+            <MessageSquare className="text-[#1e447b]" size={28} strokeWidth={2} />
+          </div>
+          <h3 className="inter-black text-xl sm:text-2xl text-slate-900 mb-3">Still have questions?</h3>
+          <p className="inter-medium text-slate-500 text-[15px] mb-8 max-w-md mx-auto">
+            Can't find the exact answer you're looking for? Chat with our engineering team for personalized support.
+          </p>
+          <Link to="/contact" className="inline-flex items-center gap-2 bg-[#1e447b] text-white inter-bold text-xs uppercase tracking-widest px-8 py-4 rounded-xl hover:bg-[#0c1b33] hover:shadow-lg hover:shadow-[#1e447b]/20 transition-all duration-300 group">
+            Contact Support <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
+
       </div>
     </section>
   );

@@ -143,8 +143,8 @@ const ContactUs = () => {
                 <div>
                   <h3 className="inter-bold text-slate-900 text-lg uppercase tracking-wider mb-2">Business Hours</h3>
                   <p className="inter-medium text-slate-600 leading-relaxed text-sm">
-                    Saturday - Thursday: 9:00 AM - 6:00 PM<br />
-                    Friday: Closed
+                    Saturday - Friday: 9:00 AM - 6:00 PM<br />
+                  
                   </p>
                 </div>
               </div>

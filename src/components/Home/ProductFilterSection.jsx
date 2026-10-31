@@ -56,15 +56,15 @@ const ProductFilterSection = () => {
   });
 
   return (
-    <section className="w-full py-10 bg-white relative min-h-[600px]">
-      <div className="max-w-[1700px] mx-auto px-6 lg:px-[5%]">
+    <section className="w-full py-16 lg:py-24 bg-[#f8fafc] relative min-h-[600px] selection:bg-[#1e447b] selection:text-white">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-[5%]">
         
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-8 md:mb-12">
-          <span className="inter-semibold text-[#1e447b] tracking-[0.2em] text-[14px] uppercase mb-4">
+        <div className="flex flex-col items-center text-center mb-12 md:mb-16">
+          <span className="inter-bold text-[#eab308] tracking-[0.2em] text-[11px] uppercase mb-4 block">
             Our Inventory
           </span>
-          <h2 className="inter-bold text-4xl sm:text-5xl lg:text-[4rem] text-slate-900 tracking-tight">
+          <h2 className="text-4xl sm:text-5xl lg:text-[4rem] inter-bold text-slate-900 tracking-tight leading-tight">
             Explore Our <span className="text-[#1e447b]">Products.</span>
           </h2>
         </div>
@@ -79,16 +79,16 @@ const ProductFilterSection = () => {
                 <button
                   key={tab}
                   onClick={() => handleMainTabClick(tab)}
-                  className={`inter-bold relative px-6 py-3 text-xs uppercase tracking-widest transition-colors duration-300 rounded-none border whitespace-nowrap snap-start shrink-0 ${
+                  className={`inter-bold relative px-6 py-3.5 text-[11px] uppercase tracking-widest transition-all duration-300 rounded-full whitespace-nowrap snap-start shrink-0 ${
                     activeMainTab === tab 
-                      ? 'text-white border-[#1e447b]' 
-                      : 'text-slate-600 border-slate-200 hover:text-slate-900 hover:bg-slate-200/30'
+                      ? 'text-white shadow-md shadow-[#1e447b]/20' 
+                      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200/50'
                   }`}
                 >
                   {activeMainTab === tab && (
                     <motion.div
                       layoutId="activeFilterMainTab"
-                      className="absolute inset-0 bg-[#1e447b] z-0 rounded-none"
+                      className="absolute inset-0 bg-[#1e447b] z-0 rounded-full"
                       transition={{ type: "spring", stiffness: 450, damping: 35 }}
                     />
                   )}
@@ -97,27 +97,27 @@ const ProductFilterSection = () => {
               ))}
             </div>
             {/* Mobile Scroll Indicator */}
-            <div className="absolute top-0 right-0 bottom-4 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none md:hidden z-10" />
+            <div className="absolute top-0 right-0 bottom-4 w-12 bg-gradient-to-l from-[#f8fafc] to-transparent pointer-events-none md:hidden z-10" />
           </div>
 
           {/* Sub Tabs (Tier 2) */}
           <AnimatePresence mode="wait">
             <motion.div 
-              key={activeMainTab} // This ensures the animation runs when main tab changes
+              key={activeMainTab}
               initial={{ opacity: 0, height: 0, y: -10 }}
               animate={{ opacity: 1, height: 'auto', y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="w-full mt-4 flex flex-wrap justify-center gap-2"
+              className="w-full mt-6 flex flex-wrap justify-center gap-3"
             >
               {categoryStructure[activeMainTab].map((subTab) => (
                 <button
                   key={subTab}
                   onClick={() => setActiveSubTab(subTab)}
-                  className={`inter-bold px-4 py-2 text-[10px] uppercase tracking-widest transition-all duration-300 rounded-none border ${
+                  className={`inter-bold px-5 py-2.5 text-[10px] uppercase tracking-widest transition-all duration-300 rounded-lg border ${
                     activeSubTab === subTab 
-                      ? 'bg-[#eab308] text-slate-900 border-[#eab308]' 
-                      : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                      ? 'bg-[#eab308] text-slate-900 border-[#eab308] shadow-sm' 
+                      : 'bg-white text-slate-500 border-slate-200 hover:border-[#1e447b] hover:text-[#1e447b]'
                   }`}
                 >
                   {subTab}
@@ -129,17 +129,18 @@ const ProductFilterSection = () => {
 
         {/* Loading Spinner */}
         {loading ? (
-          <div className="w-full flex justify-center items-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-[#1e447b]" />
+          <div className="w-full flex flex-col justify-center items-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-[#1e447b] mb-4" />
+            <p className="inter-bold text-slate-400 uppercase tracking-widest text-[10px] animate-pulse">Loading Inventory...</p>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="w-full flex flex-col justify-center items-center py-20 bg-slate-50 border border-slate-200 border-dashed rounded-none">
+          <div className="w-full flex flex-col justify-center items-center py-24 bg-white border border-slate-200 border-dashed rounded-2xl">
             <h3 className="inter-black text-xl text-slate-800 uppercase tracking-tight mb-2">No Products Found</h3>
             <p className="inter-medium text-slate-500 text-sm">We are updating our inventory for this category.</p>
           </div>
         ) : (
-          /* Grid configured for exactly 4 cards on desktop */
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          /* Premium Product Grid */
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             <AnimatePresence mode='popLayout'>
               {filteredProducts.map((product) => (
                 <motion.div
@@ -151,53 +152,53 @@ const ProductFilterSection = () => {
                   key={product._id} 
                 >
                   
-                  {/* Product Card */}
+                  {/* Premium Product Card */}
                   <Link 
                     to={`/product/${product._id}`} 
-                    className="group flex flex-col bg-white rounded-none border border-slate-200 hover:border-slate-400 hover:shadow-[0_15px_30px_rgba(0,0,0,0.05)] transition-all duration-300 h-full relative"
+                    className="group flex flex-col bg-white rounded-xl border border-slate-100 hover:border-[#1e447b]/30 hover:shadow-[0_20px_40px_-15px_rgba(30,68,123,0.08)] transition-all duration-300 overflow-hidden h-full"
                   >
                     
                     {/* Image Box */}
-                    <div className="w-full aspect-[4/5] overflow-hidden bg-slate-100 relative rounded-none border-b border-slate-200">
+                    <div className="w-full aspect-[4/5] bg-slate-50 relative overflow-hidden">
                       
-                      {/* image theke images[0] kora hoyeche */}
                       {product.images && product.images.length > 0 ? (
                         <img 
                           src={product.images[0]} 
                           alt={product.title} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-200">
-                          <span className="text-xs text-slate-400 inter-medium">No Image</span>
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 inter-medium text-xs">
+                          No Image
                         </div>
                       )}
 
-                      <div className="inter-bold absolute top-0 left-0 bg-[#1e447b] px-3 py-1 text-[9px] text-white uppercase tracking-wider rounded-none shadow-sm">
+                      {/* Floating Category Badge */}
+                      <div className="absolute top-4 left-4 bg-[#0c1b33] px-4 py-1.5 inter-bold text-[9px] text-[#eab308] uppercase tracking-widest z-10 rounded-full shadow-md">
                         {product.category}
+                      </div>
+
+                      {/* Hover Overlay with Text */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c1b33]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span className="text-white inter-bold text-xs flex items-center gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                          View Details <ArrowRight size={14} />
+                        </span>
                       </div>
                     </div>
                     
                     {/* Content Box */}
-                    <div className="p-5 flex flex-col flex-grow bg-white">
-                      {/* Specs safe parsing applied */}
-                      <p className="inter-bold text-[#1e447b] text-[10px] uppercase tracking-wider mb-1.5 line-clamp-1">
+                    <div className="p-6 flex flex-col flex-grow">
+                      
+                      <p className="inter-bold text-[#1e447b] text-[10px] uppercase tracking-widest mb-2 line-clamp-1">
                         {product.specs && typeof product.specs === 'string' ? product.specs.split('|')[0] : 'Premium Quality'}
                       </p>
                       
-                      <h3 className="inter-black text-base text-slate-900 mb-4 group-hover:text-[#1e447b] transition-colors line-clamp-2 leading-snug">
+                      <h3 className="inter-black text-lg text-slate-900 mb-6 group-hover:text-[#1e447b] transition-colors line-clamp-2 leading-tight">
                         {product.title}
                       </h3>
                       
-                      <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
-                        <span className="inter-bold text-slate-500 text-xs uppercase tracking-wider group-hover:text-[#1e447b] transition-colors">
-                          View Details
-                        </span>
-                        
-                        <div className="w-8 h-8 border border-slate-200 flex items-center justify-center group-hover:bg-[#1e447b] group-hover:border-[#1e447b] transition-all duration-300 rounded-none">
-                          <ArrowRight size={14} className="text-slate-400 group-hover:text-white transition-all duration-300" />
-                        </div>
-                      </div>
+                      {/* Animated Bottom Line */}
+                      <div className="mt-auto w-8 h-1 bg-[#eab308] rounded-full transition-all duration-300 group-hover:w-full"></div>
                     </div>
                     
                   </Link>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckSquare, Send, Settings, ShieldCheck, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowLeft, CheckSquare, Send, ShieldCheck, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -61,9 +61,8 @@ const ProductDetails = () => {
     };
 
     fetchProductData();
-    // Jodi keu related product e click kore, tahole page er ekdom upore chole jabe
-    window.scrollTo(0, 0); 
-  }, [id]); // id change holei (ortat onno product e gele) effect abar run korbe
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+  }, [id]);
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault();
@@ -94,87 +93,116 @@ const ProductDetails = () => {
     }
   };
 
-  if (loading) return <div className="w-full min-h-screen flex items-center justify-center bg-slate-50"><Loader2 className="w-12 h-12 text-[#1e447b] animate-spin" /></div>;
-  if (!product) return <div className="w-full min-h-screen flex items-center justify-center bg-slate-50"><h2 className="inter-bold text-2xl text-slate-800">Product Not Found</h2></div>;
+  if (loading) return <div className="w-full min-h-screen flex items-center justify-center bg-[#f8fafc]"><Loader2 className="w-10 h-10 text-[#1e447b] animate-spin" /></div>;
+  if (!product) return <div className="w-full min-h-screen flex flex-col items-center justify-center bg-[#f8fafc]"><h2 className="inter-bold text-2xl text-slate-800 mb-4">Product Not Found</h2><Link to="/Product" className="text-[#1e447b] underline hover:text-[#eab308]">Go Back</Link></div>;
 
   return (
-    <div className="w-full min-h-screen bg-slate-50 pt-24 pb-20">
-      <div className="max-w-375 mx-auto px-6 lg:px-[5%]">
+    <div className="w-full min-h-screen bg-[#f8fafc] pt-24 pb-24 font-sans selection:bg-[#1e447b] selection:text-white">
+      <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
         
-        <Link to="/Product" className="inline-flex items-center gap-2 inter-bold text-sm text-[#1e447b] uppercase tracking-widest hover:text-[#eab308] transition-colors mb-10">
-          <ArrowLeft size={16} /> Back to Catalog
+        {/* Back Button */}
+        <Link to="/Product" className="inline-flex items-center gap-2 inter-semibold text-[13px] text-slate-500 uppercase tracking-widest hover:text-[#1e447b] transition-colors mb-10 group">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Catalog
         </Link>
 
-        {/* --- Top Section: Product Overview --- */}
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 bg-white border border-slate-200 p-6 lg:p-12 mb-16 shadow-sm rounded-none">
-          
-          <div className="w-full lg:w-1/2 flex flex-col gap-4 min-w-0">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="w-full aspect-square bg-slate-100 border border-slate-200 relative flex-shrink-0 rounded-none overflow-hidden">
-              <div className="absolute top-4 left-4 bg-[#1e447b] px-4 py-1.5 inter-bold text-xs text-white uppercase tracking-widest z-10 rounded-none">
-                {product.category}
-              </div>
-              <img src={mainImage || (product.images && product.images[0])} alt={product.title} className="w-full h-full object-cover transition-opacity duration-300" />
-            </motion.div>
-
-            {product.images && product.images.length > 1 && (
-              <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
-                {product.images.map((img, index) => (
-                  <button key={index} onClick={() => setMainImage(img)} className={`aspect-square border-2 rounded-none overflow-hidden transition-all duration-300 ${mainImage === img ? 'border-[#1e447b] opacity-100' : 'border-slate-200 opacity-60 hover:opacity-100'}`}>
-                    <img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="w-full lg:w-1/2 flex flex-col justify-center min-w-0 overflow-hidden">
-            <p className="inter-bold text-slate-500 text-xs uppercase tracking-[0.2em] mb-3">
-              SKU: AL-{product._id.substring(0, 6).toUpperCase()}
-            </p>
-            <h1 className="inter-bold text-4xl lg:text-5xl text-slate-700 leading-tight mb-6 wrap-break-word">
-              {product.title}
-            </h1>
+        {/* --- Top Section: Premium Product Overview --- */}
+        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 lg:p-12 mb-20">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
             
-            <p className="inter-normal text-lg text-slate-600 text-justify leading-relaxed mb-8 break-words [overflow-wrap:anywhere]">
-              {product.description}
-            </p>
+            {/* Left: Image Gallery */}
+            <div className="w-full lg:w-1/2 flex flex-col gap-5">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} 
+                className="w-full aspect-[4/3] sm:aspect-square bg-slate-50 rounded-xl relative flex-shrink-0 overflow-hidden border border-slate-100 group"
+              >
+                <div className="absolute top-4 left-4 bg-[#0c1b33] px-4 py-1.5 inter-bold text-[10px] text-[#eab308] uppercase tracking-widest z-10 rounded-full shadow-md">
+                  {product.category}
+                </div>
+                <img 
+                  src={mainImage || (product.images && product.images[0])} 
+                  alt={product.title} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                />
+              </motion.div>
 
-            <div className="bg-slate-50 border border-slate-200 p-6 mb-10 rounded-none">
-              <h3 className="inter-bold text-slate-900 uppercase tracking-widest text-sm border-b border-slate-200 pb-3 mb-4">
-                Primary Specifications
-              </h3>
-              <ul className="space-y-3">
-                {/* Error Fixed Here: Handled both String and Array safely */}
-                {product.specs ? (
-                  (Array.isArray(product.specs) ? product.specs : product.specs.split('|')).map((spec, index) => (
-                    <li key={index} className="flex items-start gap-3 text-slate-700 break-words">
-                      <CheckSquare size={18} className="text-[#eab308] shrink-0 mt-0.5" />
-                      <span className="inter-medium">{typeof spec === 'string' ? spec.trim() : spec}</span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="inter-medium text-slate-500">No specifications provided.</li>
-                )}
-              </ul>
+              {product.images && product.images.length > 1 && (
+                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                  {product.images.map((img, index) => (
+                    <button 
+                      key={index} 
+                      onClick={() => setMainImage(img)} 
+                      className={`relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden transition-all duration-300 ${
+                        mainImage === img ? 'ring-2 ring-[#1e447b] ring-offset-2 opacity-100' : 'border border-slate-200 opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#inquiry-form" className="flex items-center justify-center gap-3 bg-[#1e447b] text-white px-8 py-4 inter-bold uppercase tracking-widest text-xs border border-[#1e447b] hover:bg-[#eab308] hover:border-[#eab308] hover:text-slate-900 transition-all duration-300 rounded-none w-full sm:w-auto">
-                <Send size={16} /> Request Quote
-              </a>
-            </div>
-          </motion.div>
+            {/* Right: Product Details */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} 
+              className="w-full lg:w-1/2 flex flex-col justify-center"
+            >
+              <div className="mb-6">
+                <p className="inter-semibold text-slate-400 text-[11px] uppercase tracking-[0.2em] mb-2">
+                  SKU: AL-{product._id.substring(0, 6).toUpperCase()}
+                </p>
+                {/* Title size reduced and made more elegant */}
+                <h1 className="inter-black text-3xl md:text-4xl text-slate-900 leading-[1.2] tracking-tight">
+                  {product.title}
+                </h1>
+              </div>
+              
+              <div className="w-12 h-1 bg-[#eab308] mb-8 rounded-full"></div>
+              
+              <p className="inter-regular text-slate-600 text-[15px] sm:text-base leading-relaxed mb-10 text-justify">
+                {product.description}
+              </p>
+
+              {/* Premium Specifications Box */}
+              <div className="bg-slate-50/50 border border-slate-100 rounded-xl p-6 sm:p-8 mb-10">
+                <h3 className="inter-bold text-slate-800 uppercase tracking-widest text-xs flex items-center gap-2 mb-6">
+                  <ShieldCheck size={16} className="text-[#1e447b]" /> Technical Specifications
+                </h3>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6">
+                  {product.specs ? (
+                    (Array.isArray(product.specs) ? product.specs : product.specs.split('|')).map((spec, index) => (
+                      <li key={index} className="flex items-start gap-3 text-slate-700">
+                        <CheckSquare size={16} className="text-[#eab308] shrink-0 mt-0.5" />
+                        <span className="inter-medium text-sm leading-snug">{typeof spec === 'string' ? spec.trim() : spec}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="inter-medium text-sm text-slate-500">No technical specifications provided.</li>
+                  )}
+                </ul>
+              </div>
+
+              <div>
+                <a href="#inquiry-form" className="inline-flex items-center justify-center gap-3 bg-[#1e447b] text-white px-8 py-4 rounded-xl inter-bold uppercase tracking-widest text-xs hover:bg-[#0c1b33] hover:shadow-lg hover:shadow-[#1e447b]/20 transition-all duration-300 w-full sm:w-auto group">
+                  Request a Quote <Send size={16} className="group-hover:translate-x-1 transition-transform" />
+                </a>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        {/* --- NEW: Related Products Section --- */}
+        {/* --- NEW: Premium Related Products Section --- */}
         {relatedProducts.length > 0 && (
-          <div className="mb-16">
-            <div className="flex items-center justify-between border-b-2 border-slate-200 pb-4 mb-8">
-              <h2 className="inter-black text-2xl text-slate-900 uppercase tracking-tight">
-                Related <span className="text-[#1e447b]">Products</span>
-              </h2>
-              <Link to="/Product" className="inter-bold text-[#1e447b] text-xs uppercase tracking-widest hover:text-[#eab308] transition-colors flex items-center gap-2">
-                View All <ArrowRight size={14} />
+          <div className="mb-24">
+            <div className="flex items-end justify-between border-b border-slate-200 pb-5 mb-10">
+              <div>
+                <span className="inter-bold text-[#eab308] tracking-[0.2em] text-[10px] uppercase block mb-1">More Options</span>
+                <h2 className="inter-black text-2xl md:text-3xl text-slate-900 tracking-tight">
+                  Related Products
+                </h2>
+              </div>
+              <Link to="/Product" className="hidden sm:flex inter-bold text-[#1e447b] text-[11px] uppercase tracking-widest hover:text-[#eab308] transition-colors items-center gap-2 group">
+                View Catalog <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
             
@@ -183,48 +211,30 @@ const ProductDetails = () => {
                 <Link 
                   key={relProduct._id}
                   to={`/product/${relProduct._id}`} 
-                  className="group flex flex-col bg-white rounded-none border border-slate-200 hover:border-[#1e447b] hover:shadow-[0_20px_40px_-15px_rgba(30,68,123,0.1)] transition-all duration-300 h-full relative"
+                  className="group flex flex-col bg-white rounded-xl border border-slate-100 hover:border-[#1e447b]/30 hover:shadow-[0_20px_40px_-15px_rgba(30,68,123,0.08)] transition-all duration-300 overflow-hidden"
                 >
-                  <div className="w-full aspect-4/5 overflow-hidden bg-slate-100 relative rounded-none border-b border-slate-100">
+                  <div className="w-full aspect-[4/5] bg-slate-50 relative overflow-hidden">
                     {relProduct.images && relProduct.images.length > 0 ? (
                       <img 
                         src={relProduct.images[0]} 
                         alt={relProduct.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400 inter-medium text-sm">
-                        No Image
-                      </div>
+                      <div className="w-full h-full flex items-center justify-center text-slate-400 inter-medium text-xs">No Image</div>
                     )}
-                    
-                    <div className="inter-bold absolute top-0 left-0 bg-[#0c1b33] px-4 py-2 text-[9px] text-[#eab308] uppercase tracking-widest rounded-none shadow-sm">
-                      {relProduct.category}
-                    </div>
-
-                    <div className="absolute inset-0 bg-[#0c1b33]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                       <div className="bg-white p-3 rounded-none translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                          <ArrowRight size={20} className="text-[#1e447b]" />
-                       </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c1b33]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <span className="text-white inter-bold text-xs flex items-center gap-2">View Details <ArrowRight size={14} /></span>
                     </div>
                   </div>
                   
-                  <div className="p-6 flex flex-col grow bg-white">
-                    <p className="inter-bold text-[#1e447b] text-[10px] uppercase tracking-widest mb-2 line-clamp-1">
-                      {relProduct.specs && typeof relProduct.specs === 'string' ? relProduct.specs.split('|')[0] : (Array.isArray(relProduct.specs) ? relProduct.specs[0] : 'Premium Quality')}
+                  <div className="p-5 flex flex-col grow">
+                    <p className="inter-bold text-[#1e447b] text-[9px] uppercase tracking-widest mb-1.5 line-clamp-1">
+                      {relProduct.category}
                     </p>
-                    
-                    <h3 className="inter-black text-xl text-slate-900 mb-4 group-hover:text-[#1e447b] transition-colors line-clamp-2 leading-tight">
+                    <h3 className="inter-black text-lg text-slate-900 group-hover:text-[#1e447b] transition-colors line-clamp-2 leading-tight">
                       {relProduct.title}
                     </h3>
-                    
-                    <div className="w-8 h-1 bg-[#eab308] mb-4 transition-all duration-300 group-hover:w-full"></div>
-                    
-                    <div className="mt-auto flex items-center justify-between pt-2">
-                      <span className="inter-bold text-slate-500 text-[11px] uppercase tracking-wider group-hover:text-[#1e447b] transition-colors">
-                        View Details
-                      </span>
-                    </div>
                   </div>
                 </Link>
               ))}
@@ -232,83 +242,93 @@ const ProductDetails = () => {
           </div>
         )}
 
-        {/* --- Bottom Section: Inquiry Form --- */}
-        <div id="inquiry-form" className="w-full">
-          <div className="bg-white border-t-4 border-[#1e447b] shadow-[0_20px_40px_-15px_rgba(30,68,123,0.05)] p-8 md:p-12 rounded-none">
-            <div className="mb-10">
-              <h2 className="inter-black text-2xl md:text-3xl text-slate-900 uppercase tracking-tight mb-2">Send us a message</h2>
-              <p className="inter-medium text-slate-500 text-sm">Need specific requirements or a bulk quotation for {product.title}? Fill out the form below.</p>
+        {/* --- Bottom Section: Premium Inquiry Form --- */}
+        <div id="inquiry-form" className="w-full max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden border border-slate-100">
+            
+            {/* Form Header */}
+            <div className="bg-[#0c1b33] p-8 md:p-12 text-center relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+              <h2 className="inter-black text-2xl md:text-3xl text-white tracking-tight mb-2 relative z-10">Request a Quotation</h2>
+              <p className="inter-medium text-slate-400 text-sm relative z-10">Need specific requirements for the {product.title}? Our team is ready to help.</p>
             </div>
 
-            {status.message && (
-              <div className={`p-4 mb-8 inter-bold text-sm flex items-start gap-3 rounded-none ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
-                {status.type === 'success' && <CheckCircle2 className="shrink-0 mt-0.5" size={18} />}
-                <p>{status.message}</p>
-              </div>
-            )}
-
-            <form onSubmit={handleInquirySubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="inter-bold text-[10px] text-slate-500 uppercase tracking-widest mb-2 block">Full Name *</label>
-                  <input 
-                    type="text" required
-                    value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="inter-medium w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 focus:outline-none focus:border-[#1e447b] focus:bg-white transition-colors rounded-none"
-                    placeholder="John Doe"
-                  />
+            {/* Form Body */}
+            <div className="p-8 md:p-12">
+              {status.message && (
+                <div className={`p-4 mb-8 inter-medium text-sm flex items-center gap-3 rounded-lg ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+                  {status.type === 'success' && <CheckCircle2 className="shrink-0" size={18} />}
+                  <p>{status.message}</p>
                 </div>
-                <div>
-                  <label className="inter-bold text-[10px] text-slate-500 uppercase tracking-widest mb-2 block">Phone Number *</label>
-                  <input 
-                    type="tel" required
-                    value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="inter-medium w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 focus:outline-none focus:border-[#1e447b] focus:bg-white transition-colors rounded-none"
-                    placeholder="+880 1XXX-XXXXXX"
-                  />
-                </div>
-              </div>
+              )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="inter-bold text-[10px] text-slate-500 uppercase tracking-widest mb-2 block">Email Address *</label>
-                  <input 
-                    type="email" required
-                    value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="inter-medium w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 focus:outline-none focus:border-[#1e447b] focus:bg-white transition-colors rounded-none"
-                    placeholder="john@company.com"
-                  />
+              <form onSubmit={handleInquirySubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="inter-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-2 block">Full Name *</label>
+                    <input 
+                      type="text" required
+                      value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      className="inter-medium w-full bg-slate-50/50 border border-slate-200 text-slate-900 px-4 py-3.5 rounded-xl focus:outline-none focus:border-[#1e447b] focus:bg-white focus:ring-4 focus:ring-[#1e447b]/10 transition-all"
+                      placeholder="Enter your name"
+                    />
+                  </div>
+                  <div>
+                    <label className="inter-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-2 block">Phone Number *</label>
+                    <input 
+                      type="tel" required
+                      value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      className="inter-medium w-full bg-slate-50/50 border border-slate-200 text-slate-900 px-4 py-3.5 rounded-xl focus:outline-none focus:border-[#1e447b] focus:bg-white focus:ring-4 focus:ring-[#1e447b]/10 transition-all"
+                      placeholder="+880 1XXX-XXXXXX"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="inter-bold text-[10px] text-slate-500 uppercase tracking-widest mb-2 block">Subject *</label>
-                  <input 
-                    type="text" required
-                    value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                    className="inter-medium w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 focus:outline-none focus:border-[#1e447b] focus:bg-white transition-colors rounded-none"
-                  />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="inter-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-2 block">Email Address *</label>
+                    <input 
+                      type="email" required
+                      value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="inter-medium w-full bg-slate-50/50 border border-slate-200 text-slate-900 px-4 py-3.5 rounded-xl focus:outline-none focus:border-[#1e447b] focus:bg-white focus:ring-4 focus:ring-[#1e447b]/10 transition-all"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="inter-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-2 block">Subject *</label>
+                    <input 
+                      type="text" required
+                      value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                      className="inter-medium w-full bg-slate-50/50 border border-slate-200 text-slate-900 px-4 py-3.5 rounded-xl focus:outline-none focus:border-[#1e447b] focus:bg-white focus:ring-4 focus:ring-[#1e447b]/10 transition-all"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="inter-bold text-[10px] text-slate-500 uppercase tracking-widest mb-2 block">Your Message *</label>
-                <textarea 
-                  required rows="5"
-                  value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="inter-medium w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 focus:outline-none focus:border-[#1e447b] focus:bg-white transition-colors rounded-none resize-none"
-                  placeholder="Tell us about your requirements..."
-                ></textarea>
-              </div>
+                <div>
+                  <label className="inter-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-2 block">Your Message *</label>
+                  <textarea 
+                    required rows="5"
+                    value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    className="inter-medium w-full bg-slate-50/50 border border-slate-200 text-slate-900 px-4 py-3.5 rounded-xl focus:outline-none focus:border-[#1e447b] focus:bg-white focus:ring-4 focus:ring-[#1e447b]/10 transition-all resize-none"
+                    placeholder="Tell us about your requirements..."
+                  ></textarea>
+                </div>
 
-              <button 
-                type="submit" disabled={submitLoading}
-                className="bg-[#1e447b] hover:bg-[#0c1b33] text-white inter-bold text-xs uppercase tracking-widest px-8 py-4 border-none transition-colors duration-300 flex items-center justify-center gap-3 disabled:opacity-70 rounded-none w-full sm:w-auto shadow-lg shadow-[#1e447b]/20 hover:shadow-[#1e447b]/40"
-              >
-                {submitLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                {submitLoading ? 'Sending Message...' : 'Submit Inquiry'}
-              </button>
-            </form>
+                <div className="pt-2">
+                  <button 
+                    type="submit" disabled={submitLoading}
+                    className="w-full bg-[#1e447b] hover:bg-[#0c1b33] text-white inter-bold text-[13px] uppercase tracking-widest py-4 rounded-xl border-none transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 shadow-lg shadow-[#1e447b]/20 hover:shadow-[#1e447b]/40"
+                  >
+                    {submitLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={18} />}
+                    {submitLoading ? 'Sending Message...' : 'Submit Inquiry'}
+                  </button>
+                </div>
+              </form>
+            </div>
+            
           </div>
         </div>
+        
       </div>
     </div>
   );
